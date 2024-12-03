@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--api.insecure=true"  # Only for development
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - wordpress_network
+
+  wordpress:
+    image: wordpress:latest
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./src:/var/www/html
+      - wordpress-uploads:/var/www/html/wp-content/uploads
+    depends_on:
+      - db
+    networks:
+      - wordpress_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wordpress.rule=HostRegexp(`[a-zA-Z0-9-]+.wordpress.docker.local`) || Host(`wordpress.docker.local`)"
+      - "traefik.http.routers.wordpress.entrypoints=web"
+      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+
+  db:
+    image: mariadb:10.6
+    platform: linux/arm64
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress_password
+    volumes:
+      - wordpress-data:/var/lib/mysql
+    networks:
+      - wordpress_network
+
+networks:
+  wordpress_network:
+    driver: bridge
+
+volumes:
+  wordpress-data:
+  wordpress-uploads:

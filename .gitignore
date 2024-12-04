@@ -1,1 +1,3 @@
-.src/
+src/
+tmp/
+.DS_Store

@@ -1,0 +1,26 @@
+{
+  "cSpell.words": [
+    "ABSPATH",
+    "bloginfo",
+    "dashicons",
+    "sitepress",
+    "wpdb",
+    "wpml",
+    "WPMU"
+  ],
+  "[php]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "wongjn.php-sniffer"
+  },
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[xml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "phpSniffer.run": "onSave",
+  "phpSniffer.standard": ".phpcs.xml",
+	"phpSniffer.executablesFolder": "./src/vendor/bin"
+}

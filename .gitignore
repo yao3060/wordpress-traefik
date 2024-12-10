@@ -1,3 +1,5 @@
-src/
-tmp/
 .DS_Store
+.env
+.cache/*
+src/wp/*
+src/vendor/*
